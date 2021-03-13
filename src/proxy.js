@@ -11,19 +11,19 @@ export const router = express.Router();
 function generateTitle(period,type) {
     let period_str;
     let type_str;
-    if(period == "hour"){
+    if(period === "hour"){
         period_str = "seinustu klukkustund";
     }else if(period == "day") {
-        period_str == "seinasta dag";
-    }else if (period =="week") {
-        period_str = "seinusut viku";
+        period_str === "seinasta dag";
+    }else if (period === "week") {
+        period_str = "seinustu viku";
     }else{
         period_str = "seinusta mánuð";
     }
 
-    if(type == "significant") {
+    if(type === "significant") {
         type_str = "Verulegir jarðskjálftar, ";
-    }else if(type=="all") {
+    }else if(type === "all") {
         type_str = "Allir jarðskjálftar, ";
     }else {
         type_str = `${type}+ á richter jarðskjálftar`;
@@ -31,41 +31,41 @@ function generateTitle(period,type) {
     return type_str + period_str;
 }
 
-async function fetchData(req,res,next) {
 
-    const cacheKey = `${req.query.type}-${req.query.period}`;
+
+router.get('/proxy', async (req, res, next) => {
+    const url = `https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/${req.query.type}_${req.query.period}.geojson`;
+    const key = `${req.query.type}_${req.query.period}`;
     let result;
-    const url = "https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/${req.query.type}_${req.query.period}.geojson";
-    const cache_timer = timerStart();
-    result = await get(cacheKey);
-    if(result) {
-        const gogn = {
-            title: result.title,
-            data: result.data,
-            info: {
-                cached: true,
-                elapsed: timerEnd(cache_timer),
-            }
-        }
-        return res.json(gogn);
+    let cache_timer = timerStart();
+  
+    result = await get(key);
+    if (result) {
+      const gogn = {
+        title: result.title,
+        data: result.data,
+        info: {
+          cached: true,
+          elapsed: timerEnd(cache_timer),
+        },
+      };
+      return res.json(gogn);
     }
-    const fetch_timer_start = timerStart();
-    try{
-        result = await fetch(url);
-    }catch(e){
-        return next();
+    const fetch_timer = timerStart();
+    try {
+      result = await fetch(url);
+    } catch (e) {
+      return next();
     }
-    const txt = await result.text();
+    const text = await result.text();
     const gogn = {
-        title: generateTitle(req.query.period,req.query.type),
-        data: txt,
-        info:{
-            cached: false,
-            elapsed: timerEnd(fetch_timer_start),
-        }
+      title: generateTitle(req.query.period, req.query.type),
+      data: JSON.parse(text),
+      info: {
+        cached: false,
+        elapsed: timerEnd(fetch_timer),
+      },
     };
-    set(cacheKey,txt,60);
+    await set(key, gogn, 60);
     return res.json(gogn);
-}
-
-router.get('/proxy', fetchData);
+  });

@@ -1,8 +1,12 @@
 import redis from 'redis';
 import util from 'util';
-
+import dotenv from 'dotenv';
 // Ættum að lesa úr .env
-const REDIS_URL = 'redis://127.0.0.1:6379/0';
+dotenv.config();
+
+const {
+  REDIS_URL: REDIS_URL = 'redis://127.0.0.1:6379/0' || process.env.REDIS_URL,
+} = process.env;
 
 // Ef við myndum vilja slökkva á caching, sleppum að skilgreina REDIS_URL
 let client;
