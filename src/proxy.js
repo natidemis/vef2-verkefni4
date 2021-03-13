@@ -24,7 +24,7 @@ function generateTitle(period, type) {
   } else if (type === 'all') {
     typeStr = 'Allir jarðskjálftar, ';
   } else {
-    typeStr = `${type}+ á richter jarðskjálftar`;
+    typeStr = `${type}+ á richter jarðskjálftar, `;
   }
   return typeStr + periodSstr;
 }
