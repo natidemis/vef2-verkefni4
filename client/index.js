@@ -9,10 +9,22 @@ document.addEventListener('DOMContentLoaded', async () => {
   // Hreinsa header og upplýsingar þegar ný gögn eru sótt
   // Sterkur leikur að refactora úr virkni fyrir event handler í sér fall
 
-  const earthquakes = await fetchEarthquakes();
 
-  // Fjarlægjum loading skilaboð eftir að við höfum sótt gögn
+  const urls = window.location.search;
+  console.log(urls);
+  const URL = new URLSearchParams(urls);
+
+  const period = URL.get('period');
+  const type = URL.get('type');
   const loading = document.querySelector('.loading');
+  loading.classList.toggle('hidden');
+
+
+
+  const earthquakes = await fetchEarthquakes(type,period);
+  console.log(earthquakes);
+  // Fjarlægjum loading skilaboð eftir að við höfum sótt gögn
+
   const parent = loading.parentNode;
   parent.removeChild(loading);
 
