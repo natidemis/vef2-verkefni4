@@ -1,7 +1,7 @@
 // TODO útfæra proxy virkni
 import fetch from 'node-fetch';
 import {timerStart, timerEnd} from './time.js';
-import {get, set} from './cache.js';
+//import {get, set} from './cache.js';
 import express from 'express';
 
 
