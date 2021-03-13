@@ -1,9 +1,9 @@
 export async function fetchEarthquakes(type, period) {
   // TODO sækja gögn frá proxy þjónustu
-  if(!type || !period){
-    return {data:{},};
+  if (!type || !period) {
+    return { data: {} };
   }
-  const url =  `/proxy?period=${period}&type=${type}`;
+  const url = `/proxy?period=${period}&type=${type}`;
   let result;
   try {
     result = await fetch(url);

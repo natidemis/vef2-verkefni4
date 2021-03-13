@@ -1,4 +1,3 @@
- 
 import { fetchEarthquakes } from './lib/earthquakes';
 import { el, element, formatDate } from './lib/utils';
 import { init, createPopup } from './lib/map';
