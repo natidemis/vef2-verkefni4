@@ -38,7 +38,7 @@ router.get('/proxy', async (req, res, next) => {
     const key = `${req.query.type}_${req.query.period}`;
     let result;
     let cache_timer = timerStart();
-  
+  /**
     result = await get(key);
     if (result) {
       const gogn = {
@@ -51,6 +51,7 @@ router.get('/proxy', async (req, res, next) => {
       };
       return res.json(gogn);
     }
+    */
     const fetch_timer = timerStart();
     try {
       result = await fetch(url);
