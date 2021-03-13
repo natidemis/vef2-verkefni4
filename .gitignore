@@ -22,3 +22,6 @@ yarn-debug.log*
 yarn-error.log*
 
 .env
+
+# fyrir heroku
+/src/cache.js
